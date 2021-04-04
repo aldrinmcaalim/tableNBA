@@ -84,3 +84,73 @@ const warriorsGames = [
     },
   },
 ];
+
+const makeChart = (games, targetTeam) => {
+  const ulParent = document.createElement("ul");
+  const body = document.body;
+
+  for (let game of games) {
+    const { homeTeam, awayTeam } = game;
+    const gameLi = document.createElement("li");
+    gameLi.innerHTML = getScoreLine(game);
+    isWinner(game, targetTeam);
+    gameLi.classList.add(isWinner(game, targetTeam) ? "win" : "loss");
+    ulParent.appendChild(gameLi);
+    body.prepend(ulParent);
+  }
+  return ulParent;
+};
+
+const isWinner = ({ homeTeam, awayTeam }, targetTeam) => {
+  const target = homeTeam.team === targetTeam ? homeTeam : awayTeam;
+  return target.isWinner;
+};
+
+const getScoreLine = ({ homeTeam, awayTeam }) => {
+  const { team: hTeam, points: hPoints } = homeTeam;
+  const { team: aTeam, points: aPoints } = awayTeam;
+
+  let scoreLine = "";
+  const teamNames = `${aTeam} @ ${hTeam}`;
+  if (aPoints > hPoints) {
+    scoreLine = `<b>${aPoints}</b>-${hPoints}`;
+  } else {
+    scoreLine = `${aPoints}-<b>${hPoints}</b>`;
+  }
+  return `${teamNames} ${scoreLine}`;
+};
+
+const gsSection = document.querySelector("#gs");
+const hrSection = document.querySelector("#hr");
+
+const gsChart = makeChart(warriorsGames, "Golden State");
+const hrChart = makeChart(warriorsGames, "Houston");
+
+gsSection.appendChild(gsChart);
+hrSection.appendChild(hrChart);
+// const ulParent = document.createElement("ul");
+// const body = document.body;
+
+// for (let game of warriorsGames) {
+//   const { homeTeam, awayTeam } = game;
+//   const gameLi = document.createElement("li");
+
+//   const { team: hTeam, points: hPoints } = homeTeam;
+//   const { team: aTeam, points: aPoints } = awayTeam;
+
+//   let scoreLine = "";
+//   const teamNames = `${aTeam} @ ${hTeam}`;
+//   if (aPoints > hPoints) {
+//     scoreLine = `<b>${aPoints}</b>-${hPoints}`;
+//   } else {
+//     scoreLine = `${aPoints}-<b>${hPoints}</b>`;
+//   }
+
+//   const warriors = hTeam === "Golden State" ? homeTeam : awayTeam;
+//   gameLi.classList.add(warriors.isWinner ? "win" : "loss");
+
+//   gameLi.innerHTML = `${teamNames} ${scoreLine}`;
+//   ulParent.appendChild(gameLi);
+// }
+
+// body.prepend(ulParent);
